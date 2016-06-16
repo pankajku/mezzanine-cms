@@ -14,6 +14,9 @@ VOL=""
 if [ ! -z "$PGDATA_DIR" ]; then
     VOL="-v $PGDATA_DIR:/var/lib/postgresql/data"
 fi
+if [ ! -z "$STATIC_DIR" ]; then
+    VOL="$VOL -v $STATIC_DIR:/myproject/static"
+fi
 case $1 in
     run)
     docker run --name mezz-server -d $ENV $VOL -p 80:8000 pankajku/mezzanine

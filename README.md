@@ -14,25 +14,24 @@ $ ./docker-mezz.sh run
 $ ./docker-mezz.sh list
 1f27feaf1a3b        pankajku/mezzanine   "/docker-entrypoint.s"   7 seconds ago       Up 7 seconds        5432/tcp, 0.0.0.0:80->8000/tcp   mezz-server
 ```
-The container runs Postgres RDBMS with data files on a container internal directory which would get wiped out when the container terminates. To use a directory on the host machine, set environment variable `PGDATA_DIR` to point to that directory (note: this doesn't work with Docker on MacOSX due to a known issue).
+The container runs Postgres RDBMS with data and other static files on container internal directories which would get wiped out when the container terminates. To use directories on the host machine, set environment variables `PGDATA_DIR` and `STATIC_DIR` to point to corresponding directories on the host machine (note: this doesn't work with Docker on MacOSX due to a known issue).
 
 ```
-$ mkdir /tmp/pgdata
-$ ls -l /tmp/pgdata
-total 0
-$ export PGDATA_DIR=/tmp/pgdata
+$ mkdir -p /tmp/mezzanine/pgdata /tmp/mezzanine/static
+$ export PGDATA_DIR=/tmp/mezzanine/pgdata
+$ export STATIC_DIR=/tmp/mezzanine/static
 $ ./docker-mezz.sh run
 c8112181ba68627023b2b7671af45bb13effb728890806f8382139c21f5e7faa
-$ ls -l /tmp/pgdata
+$ ls -l /tmp/mezzanine/pgdata
 ls: cannot open directory /tmp/pgdata: Permission denied
-$ sudo ls -l /tmp/pgdata
+$ sudo ls -l /tmp/mezzanine/pgdata
 total 56
 drwx------. 6 systemd-bus-proxy ssh_keys    50 Jun 15 23:11 base
 drwx------. 2 systemd-bus-proxy ssh_keys  4096 Jun 15 23:11 global
 ... snip ...
 ```
 
-The next step is to crerate the DB schema for mezzanine-cms. You can choose default for most of the prompted inputs but the password.
+The next step is to create the DB schema for mezzanine-cms. You can choose default for most of the prompted inputs but the password.
 
 ```
 $ ./docker-mezz.sh createdb
